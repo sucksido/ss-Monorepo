@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./ss-booking-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - ./ss-booking-backend:/var/www/html
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=ss_booking_backend
+      - DB_USERNAME=root
+      - DB_PASSWORD=
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./ss-booking-front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ss-booking-front:/app
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=ss_booking_backend
+      - MYSQL_ROOT_PASSWORD=
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
